@@ -30,16 +30,13 @@
         <property name="dataSource" ref="dataSource"/>
 
     </bean>
-   <tx:advice id="transactionInterceptor" transaction-manager="transactionManager" >
+<!--    开启事务处理注解-->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+<!--   <tx:advice id="transactionInterceptor" transaction-manager="transactionManager" >
        <tx:attributes>
            <tx:method name="*"/>
        </tx:attributes>
-   </tx:advice>
-    <bean id="deptDao" class="com.gavin.dao.DeptDaoImp" autowire="byName">
-<!--        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
-
-    </bean>
-
+   </tx:advice>-->
 
 <!--   Spring与 mybatis整合-->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" autowire="byName">
@@ -47,5 +44,7 @@
     <property name="dataSource" ref="dataSource"/>
     <property name="configLocation" value="mybatisConfig.xml"/>
  </bean>
-
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="com.gavin.dao"/>
+ </bean>
 </beans>
