@@ -28,7 +28,6 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 <!--        引入管理的数据源-->
         <property name="dataSource" ref="dataSource"/>
-
     </bean>
 <!--    开启事务处理注解-->
     <tx:annotation-driven transaction-manager="transactionManager" />
@@ -39,11 +38,21 @@
    </tx:advice>-->
 
 <!--   Spring与 mybatis整合-->
-<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" autowire="byName">
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
 <!--    sqlsession要开启的域即在哪个数据源上开启-->
     <property name="dataSource" ref="dataSource"/>
     <property name="configLocation" value="mybatisConfig.xml"/>
  </bean>
+<bean id ="sqlSessionFactoryTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+<constructor-arg ref="sqlSessionFactory"/>
+    <constructor-arg value="SIMPLE"/>
+</bean>
+    <bean id="sqlSessionDaoSupport" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+   <property name="mapperInterface" value="com.gavin.dao.DeptDao"/>
+   <property name="sqlSessionTemplate" ref="sqlSessionFactoryTemplate"/>
+    </bean>
+
+
 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
     <property name="basePackage" value="com.gavin.dao"/>
  </bean>
